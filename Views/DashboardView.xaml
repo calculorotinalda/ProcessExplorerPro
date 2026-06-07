@@ -1,0 +1,196 @@
+<UserControl x:Class="ProcessExplorerPro.Views.DashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:components="clr-namespace:ProcessExplorerPro.Components"
+             mc:Ignorable="d" 
+             d:DesignHeight="700" d:DesignWidth="1000">
+             
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,20">
+            <TextBlock Text="DASHBOARD" Foreground="#5C62D6" FontSize="11" FontWeight="Bold"/>
+            <TextBlock Text="Visão Geral do Sistema" Foreground="#E1E3E6" FontSize="24" FontWeight="Bold" Margin="0,4,0,0"/>
+            <TextBlock Text="Monitorização em tempo real do hardware e dos principais processos." Foreground="#848694" FontSize="13" Margin="0,2,0,0"/>
+        </StackPanel>
+
+        <!-- Metrics Grid (3 columns, 2 rows) -->
+        <UniformGrid Grid.Row="1" Columns="3" Margin="0,0,0,20">
+            <!-- CPU Card -->
+            <Border Margin="6" Background="#161821" BorderBrush="#232530" BorderThickness="1" CornerRadius="8" Padding="15">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal" Grid.Row="0">
+                        <TextBlock FontFamily="{StaticResource SegoeFluentFont}" Text="&#xE770;" Foreground="#5C62D6" FontSize="16" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="Processador (CPU)" Foreground="#848694" FontWeight="SemiBold" FontSize="12" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <TextBlock Text="{Binding CpuUsage, StringFormat={}{0:0.0}%}" Foreground="#E1E3E6" FontSize="26" FontWeight="Bold" Grid.Row="1" Margin="0,8,0,8"/>
+                    <components:PerformanceChart x:Name="CpuChart" Grid.Row="2" Title="CPU" MaxValue="100" StrokeColor="#5C62D6" FillColor="#5C62D6" Height="70" VerticalAlignment="Bottom"/>
+                </Grid>
+            </Border>
+
+            <!-- RAM Card -->
+            <Border Margin="6" Background="#161821" BorderBrush="#232530" BorderThickness="1" CornerRadius="8" Padding="15">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal" Grid.Row="0">
+                        <TextBlock FontFamily="{StaticResource SegoeFluentFont}" Text="&#xE9A1;" Foreground="#00B4D8" FontSize="16" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="Memória RAM" Foreground="#848694" FontWeight="SemiBold" FontSize="12" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Margin="0,8,0,8">
+                        <TextBlock Text="{Binding RamUsage, StringFormat={}{0:0}%}" Foreground="#E1E3E6" FontSize="26" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding RamDetails}" Foreground="#848694" FontSize="11" Margin="0,2,0,0"/>
+                    </StackPanel>
+                    <components:PerformanceChart x:Name="RamChart" Grid.Row="2" Title="RAM" MaxValue="100" StrokeColor="#00B4D8" FillColor="#00B4D8" Height="70" VerticalAlignment="Bottom"/>
+                </Grid>
+            </Border>
+
+            <!-- GPU Card -->
+            <Border Margin="6" Background="#161821" BorderBrush="#232530" BorderThickness="1" CornerRadius="8" Padding="15">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal" Grid.Row="0">
+                        <TextBlock FontFamily="{StaticResource SegoeFluentFont}" Text="&#xE7F1;" Foreground="#2A9D8F" FontSize="16" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="Placa Gráfica (GPU)" Foreground="#848694" FontWeight="SemiBold" FontSize="12" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <TextBlock Text="{Binding GpuUsage, StringFormat={}{0:0.0}%}" Foreground="#E1E3E6" FontSize="26" FontWeight="Bold" Grid.Row="1" Margin="0,8,0,8"/>
+                    <components:PerformanceChart x:Name="GpuChart" Grid.Row="2" Title="GPU" MaxValue="100" StrokeColor="#2A9D8F" FillColor="#2A9D8F" Height="70" VerticalAlignment="Bottom"/>
+                </Grid>
+            </Border>
+
+            <!-- Disk Card -->
+            <Border Margin="6" Background="#161821" BorderBrush="#232530" BorderThickness="1" CornerRadius="8" Padding="15">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal" Grid.Row="0">
+                        <TextBlock FontFamily="{StaticResource SegoeFluentFont}" Text="&#xEDA9;" Foreground="#E76F51" FontSize="16" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="Disco I/O" Foreground="#848694" FontWeight="SemiBold" FontSize="12" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Margin="0,8,0,8">
+                        <TextBlock Text="{Binding DiskUsage, StringFormat={}{0:0.0}%}" Foreground="#E1E3E6" FontSize="26" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding DiskDetails}" Foreground="#848694" FontSize="11" Margin="0,2,0,0"/>
+                    </StackPanel>
+                    <components:PerformanceChart x:Name="DiskChart" Grid.Row="2" Title="Disk" MaxValue="100" StrokeColor="#E76F51" FillColor="#E76F51" Height="70" VerticalAlignment="Bottom"/>
+                </Grid>
+            </Border>
+
+            <!-- Network Card -->
+            <Border Margin="6" Background="#161821" BorderBrush="#232530" BorderThickness="1" CornerRadius="8" Padding="15">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal" Grid.Row="0">
+                        <TextBlock FontFamily="{StaticResource SegoeFluentFont}" Text="&#xE704;" Foreground="#F4A261" FontSize="16" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="Rede" Foreground="#848694" FontWeight="SemiBold" FontSize="12" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Margin="0,8,0,8">
+                        <TextBlock Text="{Binding NetworkDetails}" Foreground="#E1E3E6" FontSize="24" FontWeight="Bold"/>
+                        <TextBlock Text="Atividade de E/S" Foreground="#848694" FontSize="11" Margin="0,4,0,0"/>
+                    </StackPanel>
+                    <components:PerformanceChart x:Name="NetworkChart" Grid.Row="2" Title="Net" MaxValue="10000" StrokeColor="#F4A261" FillColor="#F4A261" Height="70" VerticalAlignment="Bottom" Unit="Kbps"/>
+                </Grid>
+            </Border>
+
+            <!-- Temperature Card -->
+            <Border Margin="6" Background="#161821" BorderBrush="#232530" BorderThickness="1" CornerRadius="8" Padding="15">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal" Grid.Row="0">
+                        <TextBlock FontFamily="{StaticResource SegoeFluentFont}" Text="&#xE7A3;" Foreground="#E63946" FontSize="16" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="Temperatura do CPU" Foreground="#848694" FontWeight="SemiBold" FontSize="12" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <TextBlock Text="{Binding SystemTemp, StringFormat={}{0:0.0}°C}" Foreground="#E1E3E6" FontSize="26" FontWeight="Bold" Grid.Row="1" Margin="0,8,0,8"/>
+                    <components:PerformanceChart x:Name="TempChart" Grid.Row="2" Title="Temp" MaxValue="100" StrokeColor="#E63946" FillColor="#E63946" Height="70" VerticalAlignment="Bottom" Unit="°C"/>
+                </Grid>
+            </Border>
+        </UniformGrid>
+
+        <!-- Top Consumer Processes List -->
+        <Border Grid.Row="2" Margin="6" Background="#161821" BorderBrush="#232530" BorderThickness="1" CornerRadius="8" Padding="20">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                
+                <TextBlock Grid.Row="0" Text="Processos Mais Consumidores (Top CPU)" Foreground="#E1E3E6" FontSize="15" FontWeight="Bold" Margin="0,0,0,15"/>
+                
+                <ListView Grid.Row="1" ItemsSource="{Binding TopProcesses}" Background="Transparent" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,4,0,4">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="300" />
+                                    <ColumnDefinition Width="100" />
+                                    <ColumnDefinition Width="120" />
+                                    <ColumnDefinition Width="120" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                
+                                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                    <Border Background="#232530" CornerRadius="4" Width="32" Height="32" Margin="0,0,10,0" VerticalAlignment="Center">
+                                        <TextBlock FontFamily="{StaticResource SegoeFluentFont}" Text="&#xE71D;" Foreground="#5C62D6" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16"/>
+                                    </Border>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding Name}" Foreground="#E1E3E6" FontWeight="Bold" FontSize="12"/>
+                                        <TextBlock Text="{Binding Path}" Foreground="#848694" FontSize="10" TextTrimming="CharacterEllipsis" Width="240"/>
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock Text="PID" Foreground="#848694" FontSize="9"/>
+                                    <TextBlock Text="{Binding Pid}" Foreground="#E1E3E6" FontSize="11" FontWeight="SemiBold"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                                    <TextBlock Text="CPU" Foreground="#848694" FontSize="9"/>
+                                    <TextBlock Text="{Binding CpuPercent, StringFormat={}{0:0.0}%}" Foreground="#5C62D6" FontSize="12" FontWeight="Bold"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="3" VerticalAlignment="Center">
+                                    <TextBlock Text="MEMÓRIA" Foreground="#848694" FontSize="9"/>
+                                    <TextBlock Text="{Binding MemoryString}" Foreground="#E1E3E6" FontSize="11" FontWeight="SemiBold"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="4" VerticalAlignment="Center">
+                                    <TextBlock Text="PROPRIETÁRIO" Foreground="#848694" FontSize="9"/>
+                                    <TextBlock Text="{Binding User}" Foreground="#848694" FontSize="11" TextTrimming="CharacterEllipsis"/>
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

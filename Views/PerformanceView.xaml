@@ -1,0 +1,234 @@
+<UserControl x:Class="ProcessExplorerPro.Views.PerformanceView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:components="clr-namespace:ProcessExplorerPro.Components"
+             xmlns:helpers="clr-namespace:ProcessExplorerPro.Helpers"
+             mc:Ignorable="d" 
+             d:DesignHeight="700" d:DesignWidth="1000">
+             
+    <UserControl.Resources>
+        <helpers:ComparisonConverter x:Key="ComparisonConverter"/>
+        <helpers:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+    </UserControl.Resources>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,15">
+            <TextBlock Text="DESEMPENHO" Foreground="#5C62D6" FontSize="11" FontWeight="Bold"/>
+            <TextBlock Text="Monitor de Recursos do Sistema" Foreground="#E1E3E6" FontSize="20" FontWeight="Bold" Margin="0,2,0,0"/>
+        </StackPanel>
+
+        <!-- Main Panel (Left Sidebar Tabs & Right Detailed Chart) -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="260" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Left Metric Preview Tabs -->
+            <StackPanel Grid.Column="0" Margin="0,0,15,0">
+                <!-- CPU Tab -->
+                <RadioButton IsChecked="{Binding SelectedMetric, Converter={StaticResource ComparisonConverter}, ConverterParameter=CPU}" Style="{StaticResource {x:Type ToggleButton}}" HorizontalContentAlignment="Stretch" Margin="0,0,0,8" Padding="12,10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="CPU" Foreground="#E1E3E6" FontWeight="Bold" FontSize="13"/>
+                            <TextBlock Text="{Binding CpuDetails}" Foreground="#848694" FontSize="11" Margin="0,2,0,0"/>
+                        </StackPanel>
+                        <components:PerformanceChart x:Name="MiniCpuChart" Grid.Column="1" Width="80" Height="40" StrokeColor="#5C62D6" FillColor="#5C62D6" MaxValue="100"/>
+                    </Grid>
+                </RadioButton>
+
+                <!-- RAM Tab -->
+                <RadioButton IsChecked="{Binding SelectedMetric, Converter={StaticResource ComparisonConverter}, ConverterParameter=RAM}" Style="{StaticResource {x:Type ToggleButton}}" HorizontalContentAlignment="Stretch" Margin="0,0,0,8" Padding="12,10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="Memória" Foreground="#E1E3E6" FontWeight="Bold" FontSize="13"/>
+                            <TextBlock Text="{Binding RamDetails}" Foreground="#848694" FontSize="10" Margin="0,2,0,0" TextTrimming="CharacterEllipsis"/>
+                        </StackPanel>
+                        <components:PerformanceChart x:Name="MiniRamChart" Grid.Column="1" Width="80" Height="40" StrokeColor="#00B4D8" FillColor="#00B4D8" MaxValue="100"/>
+                    </Grid>
+                </RadioButton>
+
+                <!-- GPU Tab -->
+                <RadioButton IsChecked="{Binding SelectedMetric, Converter={StaticResource ComparisonConverter}, ConverterParameter=GPU}" Style="{StaticResource {x:Type ToggleButton}}" HorizontalContentAlignment="Stretch" Margin="0,0,0,8" Padding="12,10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="GPU" Foreground="#E1E3E6" FontWeight="Bold" FontSize="13"/>
+                            <TextBlock Text="{Binding GpuDetails}" Foreground="#848694" FontSize="11" Margin="0,2,0,0"/>
+                        </StackPanel>
+                        <components:PerformanceChart x:Name="MiniGpuChart" Grid.Column="1" Width="80" Height="40" StrokeColor="#2A9D8F" FillColor="#2A9D8F" MaxValue="100"/>
+                    </Grid>
+                </RadioButton>
+
+                <!-- Disk Tab -->
+                <RadioButton IsChecked="{Binding SelectedMetric, Converter={StaticResource ComparisonConverter}, ConverterParameter=Disk}" Style="{StaticResource {x:Type ToggleButton}}" HorizontalContentAlignment="Stretch" Margin="0,0,0,8" Padding="12,10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="Disco" Foreground="#E1E3E6" FontWeight="Bold" FontSize="13"/>
+                            <TextBlock Text="{Binding DiskDetails}" Foreground="#848694" FontSize="11" Margin="0,2,0,0"/>
+                        </StackPanel>
+                        <components:PerformanceChart x:Name="MiniDiskChart" Grid.Column="1" Width="80" Height="40" StrokeColor="#E76F51" FillColor="#E76F51" MaxValue="100"/>
+                    </Grid>
+                </RadioButton>
+
+                <!-- Network Tab -->
+                <RadioButton IsChecked="{Binding SelectedMetric, Converter={StaticResource ComparisonConverter}, ConverterParameter=Network}" Style="{StaticResource {x:Type ToggleButton}}" HorizontalContentAlignment="Stretch" Margin="0,0,0,8" Padding="12,10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="Rede" Foreground="#E1E3E6" FontWeight="Bold" FontSize="13"/>
+                            <TextBlock Text="{Binding NetworkDetails}" Foreground="#848694" FontSize="11" Margin="0,2,0,0"/>
+                        </StackPanel>
+                        <components:PerformanceChart x:Name="MiniNetworkChart" Grid.Column="1" Width="80" Height="40" StrokeColor="#F4A261" FillColor="#F4A261" MaxValue="10000" Unit="Kbps"/>
+                    </Grid>
+                </RadioButton>
+            </StackPanel>
+
+            <!-- Right Detailed Graphic Display -->
+            <Border Grid.Column="1" Background="#161821" BorderBrush="#232530" BorderThickness="1" CornerRadius="8" Padding="20">
+                <Grid>
+                    <!-- CPU Detail -->
+                    <Grid>
+                        <Grid.Style>
+                            <Style TargetType="Grid">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectedMetric}" Value="CPU">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Grid.Style>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0" Margin="0,0,0,15">
+                            <TextBlock Text="Histórico de Utilização do Processador" Foreground="#E1E3E6" FontSize="16" FontWeight="Bold"/>
+                            <TextBlock Text="{Binding CpuDetails}" Foreground="#5C62D6" FontSize="12" Margin="0,4,0,0"/>
+                        </StackPanel>
+                        <components:PerformanceChart x:Name="DetailedCpuChart" Grid.Row="1" Title="CPU %" MaxValue="100" StrokeColor="#5C62D6" FillColor="#5C62D6"/>
+                    </Grid>
+
+                    <!-- RAM Detail -->
+                    <Grid>
+                        <Grid.Style>
+                            <Style TargetType="Grid">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectedMetric}" Value="RAM">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Grid.Style>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0" Margin="0,0,0,15">
+                            <TextBlock Text="Histórico de Utilização da Memória RAM" Foreground="#E1E3E6" FontSize="16" FontWeight="Bold"/>
+                            <TextBlock Text="{Binding RamDetails}" Foreground="#00B4D8" FontSize="12" Margin="0,4,0,0"/>
+                        </StackPanel>
+                        <components:PerformanceChart x:Name="DetailedRamChart" Grid.Row="1" Title="RAM %" MaxValue="100" StrokeColor="#00B4D8" FillColor="#00B4D8"/>
+                    </Grid>
+
+                    <!-- GPU Detail -->
+                    <Grid>
+                        <Grid.Style>
+                            <Style TargetType="Grid">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectedMetric}" Value="GPU">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Grid.Style>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0" Margin="0,0,0,15">
+                            <TextBlock Text="Histórico de Utilização da GPU" Foreground="#E1E3E6" FontSize="16" FontWeight="Bold"/>
+                            <TextBlock Text="{Binding GpuDetails}" Foreground="#2A9D8F" FontSize="12" Margin="0,4,0,0"/>
+                        </StackPanel>
+                        <components:PerformanceChart x:Name="DetailedGpuChart" Grid.Row="1" Title="GPU %" MaxValue="100" StrokeColor="#2A9D8F" FillColor="#2A9D8F"/>
+                    </Grid>
+
+                    <!-- Disk Detail -->
+                    <Grid>
+                        <Grid.Style>
+                            <Style TargetType="Grid">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectedMetric}" Value="Disk">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Grid.Style>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0" Margin="0,0,0,15">
+                            <TextBlock Text="Histórico de Utilização do Disco" Foreground="#E1E3E6" FontSize="16" FontWeight="Bold"/>
+                            <TextBlock Text="{Binding DiskDetails}" Foreground="#E76F51" FontSize="12" Margin="0,4,0,0"/>
+                        </StackPanel>
+                        <components:PerformanceChart x:Name="DetailedDiskChart" Grid.Row="1" Title="Disco" MaxValue="100" StrokeColor="#E76F51" FillColor="#E76F51"/>
+                    </Grid>
+
+                    <!-- Network Detail -->
+                    <Grid>
+                        <Grid.Style>
+                            <Style TargetType="Grid">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectedMetric}" Value="Network">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Grid.Style>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0" Margin="0,0,0,15">
+                            <TextBlock Text="Histórico de Rede (E/S)" Foreground="#E1E3E6" FontSize="16" FontWeight="Bold"/>
+                            <TextBlock Text="{Binding NetworkDetails, StringFormat={}Velocidade Atual: {0}}" Foreground="#F4A261" FontSize="12" Margin="0,4,0,0"/>
+                        </StackPanel>
+                        <components:PerformanceChart x:Name="DetailedNetworkChart" Grid.Row="1" Title="Rede" MaxValue="10000" StrokeColor="#F4A261" FillColor="#F4A261" Unit="Kbps"/>
+                    </Grid>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

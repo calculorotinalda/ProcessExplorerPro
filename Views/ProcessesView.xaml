@@ -1,0 +1,531 @@
+<UserControl x:Class="ProcessExplorerPro.Views.ProcessesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:components="clr-namespace:ProcessExplorerPro.Components"
+             xmlns:helpers="clr-namespace:ProcessExplorerPro.Helpers"
+             mc:Ignorable="d" 
+             d:DesignHeight="700" d:DesignWidth="1100">
+
+    <UserControl.Resources>
+        <helpers:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+        <helpers:ComparisonConverter x:Key="ComparisonConverter"/>
+        <helpers:HighUsageConverter x:Key="HighUsageConverter"/>
+    </UserControl.Resources>
+             
+    <Grid Margin="20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <!-- Detail Panel Column (Expands when process is selected) -->
+            <ColumnDefinition x:Name="DetailColumn" Width="0" MinWidth="0" MaxWidth="500">
+                <ColumnDefinition.Style>
+                    <Style TargetType="ColumnDefinition">
+                        <Setter Property="Width" Value="0" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SelectedProcess, Converter={StaticResource NullToVisibilityConverter}}" Value="Visible">
+                                <Setter Property="Width" Value="420" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ColumnDefinition.Style>
+            </ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <!-- Main Processes List -->
+        <Grid Grid.Column="0" Margin="0,0,10,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <Grid Grid.Row="0" Margin="0,0,0,15">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="PROCESSOS" Foreground="#5C62D6" FontSize="11" FontWeight="Bold"/>
+                    <TextBlock Text="Explorador de Processos Ativos" Foreground="#E1E3E6" FontSize="20" FontWeight="Bold" Margin="0,2,0,0"/>
+                </StackPanel>
+                
+                <!-- System Action Buttons -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Command="{Binding KillCommand}" 
+                            Background="#15E63946"
+                            BorderBrush="#E63946"
+                            Margin="0,0,8,0"
+                            Padding="12,6">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontFamily="{StaticResource SegoeFluentFont}" Text="&#xE74D;" Foreground="#E63946" FontSize="12" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Terminar Processo" Foreground="#E63946" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    
+                    <!-- Export Dropdown Button -->
+                    <Menu Background="Transparent" BorderThickness="0" VerticalAlignment="Center">
+                        <MenuItem Header="Exportar Dados" Background="#1E202F" BorderThickness="1" BorderBrush="{StaticResource BorderBrush}" Height="30" Width="130" Margin="0" VerticalContentAlignment="Center">
+                            <MenuItem.HeaderTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontFamily="{StaticResource SegoeFluentFont}" Text="&#xEADE;" FontSize="12" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                        <TextBlock Text="Exportar Dados" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </MenuItem.HeaderTemplate>
+                            <MenuItem Header="Exportar para CSV..." Command="{Binding ExportCommand}" CommandParameter="CSV"/>
+                            <MenuItem Header="Exportar para JSON..." Command="{Binding ExportCommand}" CommandParameter="JSON"/>
+                            <MenuItem Header="Gerar Relatório HTML..." Command="{Binding ExportCommand}" CommandParameter="HTML"/>
+                        </MenuItem>
+                    </Menu>
+                </StackPanel>
+            </Grid>
+
+            <!-- Filters & Views Bar -->
+            <Border Grid.Row="1" Background="#161821" BorderBrush="#232530" BorderThickness="1" CornerRadius="8" Padding="10" Margin="0,0,0,15">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="250" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Search Box -->
+                    <Grid Grid.Column="0">
+                        <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" 
+                                 Padding="10,6,30,6"
+                                 FontSize="12"/>
+                        <!-- Search glass overlay -->
+                        <TextBlock FontFamily="{StaticResource SegoeFluentFont}" Text="&#xE721;" Foreground="{StaticResource TextMutedBrush}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" IsHitTestVisible="False"/>
+                    </Grid>
+
+                    <!-- View Mode Radio Selector -->
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="15,0,0,0">
+                        <TextBlock Text="Visualização:" Foreground="#848694" VerticalAlignment="Center" Margin="0,0,8,0" FontSize="12"/>
+                        <RadioButton Content="Árvore" IsChecked="{Binding SelectedViewMode, Converter={StaticResource ComparisonConverter}, ConverterParameter=Tree}" Style="{StaticResource {x:Type ToggleButton}}" Padding="12,5" Margin="0,0,4,0"/>
+                        <RadioButton Content="Plana" IsChecked="{Binding SelectedViewMode, Converter={StaticResource ComparisonConverter}, ConverterParameter=Flat}" Style="{StaticResource {x:Type ToggleButton}}" Padding="12,5"/>
+                    </StackPanel>
+
+                    <!-- Grouping Mode Selector -->
+                    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" Margin="15,0,0,0">
+                        <TextBlock Text="Agrupar por:" Foreground="#848694" VerticalAlignment="Center" Margin="0,0,8,0" FontSize="12"/>
+                        <ComboBox SelectedValue="{Binding SelectedGroupMode}" SelectedValuePath="Tag" Width="130">
+                            <ComboBoxItem Content="Nenhum" Tag="None" IsSelected="True"/>
+                            <ComboBoxItem Content="Proprietário" Tag="User"/>
+                            <ComboBoxItem Content="Categoria AI" Tag="Category"/>
+                        </ComboBox>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Main DataGrid -->
+            <DataGrid Grid.Row="2" 
+                      ItemsSource="{Binding DisplayedProcesses}" 
+                      SelectedItem="{Binding SelectedProcess}"
+                      AutoGenerateColumns="False" 
+                      IsReadOnly="True" 
+                      Background="#161821" 
+                      BorderBrush="#232530" 
+                      BorderThickness="1"
+                      RowBackground="#161821"
+                      AlternatingRowBackground="#191B26"
+                      GridLinesVisibility="Horizontal"
+                      HorizontalGridLinesBrush="#232530"
+                      HeadersVisibility="Column"
+                      SelectionMode="Single">
+                
+                <DataGrid.Resources>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="Background" Value="#232530"/>
+                        <Setter Property="Foreground" Value="#848694"/>
+                        <Setter Property="FontWeight" Value="SemiBold"/>
+                        <Setter Property="Padding" Value="10,8"/>
+                        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                        <Setter Property="BorderBrush" Value="#232530"/>
+                    </Style>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="Padding" Value="8,10"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Foreground" Value="#E1E3E6"/>
+                    </Style>
+                </DataGrid.Resources>
+                
+                <DataGrid.Columns>
+                    <!-- Process Name Column with Tree Node Toggle -->
+                    <DataGridTemplateColumn Header="Nome do Processo" Width="260" SortMemberPath="Name">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" Margin="{Binding DepthMargin}">
+                                    <!-- Toggle Chevron -->
+                                    <Button Command="{Binding DataContext.ToggleExpandCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            CommandParameter="{Binding}"
+                                            Background="Transparent"
+                                            BorderThickness="0"
+                                            Width="16" Height="16"
+                                            Padding="0" Margin="0,0,4,0"
+                                            VerticalAlignment="Center">
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Children.Count}" Value="0">
+                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding DataContext.SelectedViewMode, RelativeSource={RelativeSource AncestorType=DataGrid}}" Value="Flat">
+                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                        
+                                        <TextBlock FontFamily="{StaticResource SegoeFluentFont}" Text="&#xE76C;" FontSize="8" VerticalAlignment="Center">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Foreground" Value="#848694"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsExpanded}" Value="True">
+                                                            <Setter Property="LayoutTransform">
+                                                                <Setter.Value>
+                                                                    <RotateTransform Angle="90"/>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </Button>
+                                    <!-- Spacer for leaf nodes -->
+                                    <Border Width="16" Height="16" Margin="0,0,4,0" VerticalAlignment="Center">
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <MultiDataTrigger>
+                                                        <MultiDataTrigger.Conditions>
+                                                            <Condition Binding="{Binding Children.Count}" Value="0"/>
+                                                            <Condition Binding="{Binding DataContext.SelectedViewMode, RelativeSource={RelativeSource AncestorType=DataGrid}}" Value="Tree"/>
+                                                        </MultiDataTrigger.Conditions>
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </MultiDataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                    </Border>
+                                    <!-- App Icon -->
+                                    <TextBlock FontFamily="{StaticResource SegoeFluentFont}" FontSize="14" VerticalAlignment="Center" Margin="0,0,6,0">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Text" Value="&#xE71D;" />
+                                                <Setter Property="Foreground" Value="#5C62D6" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsSuspicious}" Value="True">
+                                                        <Setter Property="Foreground" Value="#E63946" />
+                                                        <Setter Property="Text" Value="&#xE7BA;" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                    <TextBlock Text="{Binding Name}" Foreground="#E1E3E6" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <!-- PID -->
+                    <DataGridTextColumn Header="PID" Binding="{Binding Pid}" Width="70" />
+                    
+                    <!-- User -->
+                    <DataGridTextColumn Header="Utilizador" Binding="{Binding User}" Width="120" />
+                    
+                    <!-- CPU % -->
+                    <DataGridTemplateColumn Header="CPU" Width="70" SortMemberPath="CpuPercent">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding CpuPercent, StringFormat={}{0:0.0}%}" FontWeight="Bold" VerticalAlignment="Center">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Foreground" Value="#E1E3E6" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding CpuPercent, Converter={StaticResource HighUsageConverter}, ConverterParameter=5}" Value="True">
+                                                    <Setter Property="Foreground" Value="#5C62D6" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    
+                    <!-- Memory -->
+                    <DataGridTextColumn Header="Memória" Binding="{Binding MemoryString}" Width="100" />
+                    
+                    <!-- GPU % -->
+                    <DataGridTextColumn Header="GPU" Binding="{Binding GpuPercent, StringFormat={}{0:0.0}%}" Width="70" />
+                    
+                    <!-- Disk I/O -->
+                    <DataGridTextColumn Header="Disco" Binding="{Binding DiskString}" Width="100" />
+                    
+                    <!-- Threads -->
+                    <DataGridTextColumn Header="Threads" Binding="{Binding ThreadsCount}" Width="80" />
+                    
+                    <!-- Handles -->
+                    <DataGridTextColumn Header="Handles" Binding="{Binding HandlesCount}" Width="80" />
+                    
+                    <!-- Status -->
+                    <DataGridTextColumn Header="Estado" Binding="{Binding Status}" Width="80" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+
+        <!-- Slide-out Detail Side Panel -->
+        <Border Grid.Column="1" 
+                Background="#161821" 
+                BorderBrush="#232530" 
+                BorderThickness="1,0,0,0" 
+                Padding="15,0,0,0"
+                Margin="5,0,0,0">
+            
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <!-- Detail Header (Close button & Info) -->
+                <Grid Grid.Row="0" Margin="0,0,0,15">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="DETALHES DO PROCESSO" Foreground="#5C62D6" FontSize="10" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding SelectedProcess.Name}" Foreground="#E1E3E6" FontSize="18" FontWeight="Bold" TextTrimming="CharacterEllipsis"/>
+                        <TextBlock Text="{Binding SelectedProcess.Pid, StringFormat={}PID: {0}}" Foreground="#848694" FontSize="11" Margin="0,2,0,0"/>
+                    </StackPanel>
+                    
+                    <Button Grid.Column="1" 
+                            Click="CloseDetails_Click" 
+                            Background="Transparent" 
+                            BorderThickness="0"
+                            VerticalAlignment="Top"
+                            Width="30" Height="30">
+                        <TextBlock FontFamily="{StaticResource SegoeFluentFont}" Text="&#xE8BB;" FontSize="11"/>
+                    </Button>
+                </Grid>
+
+                <!-- Tabs Container -->
+                <TabControl Grid.Row="1" Background="Transparent" BorderThickness="0">
+                    <!-- Tab 1: General Info -->
+                    <TabItem Header="Geral" Margin="0">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,10,0,0">
+                            <StackPanel>
+                                <TextBlock Text="Informações Gerais" Foreground="#5C62D6" FontWeight="SemiBold" FontSize="13" Margin="0,0,0,10"/>
+                                
+                                <TextBlock Text="Caminho do Ficheiro" Foreground="#848694" FontSize="10" Margin="0,0,0,2"/>
+                                <TextBox Text="{Binding SelectedProcess.Path, Mode=OneWay}" IsReadOnly="True" Background="#0D0E15" BorderBrush="#232530" TextWrapping="Wrap" Margin="0,0,0,12"/>
+
+                                <TextBlock Text="Argumentos da Linha de Comando" Foreground="#848694" FontSize="10" Margin="0,0,0,2"/>
+                                <TextBox Text="{Binding DetailCommandLine, Mode=OneWay}" IsReadOnly="True" Background="#0D0E15" BorderBrush="#232530" TextWrapping="Wrap" Height="60" VerticalScrollBarVisibility="Auto" Margin="0,0,0,12"/>
+
+                                <Grid Margin="0,0,0,12">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    
+                                    <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                                        <TextBlock Text="Editor / Publisher" Foreground="#848694" FontSize="10" Margin="0,0,0,2"/>
+                                        <TextBlock Text="{Binding DetailPublisher}" Foreground="#E1E3E6" FontWeight="SemiBold" FontSize="12" TextTrimming="CharacterEllipsis"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock Text="Versão do Produto" Foreground="#848694" FontSize="10" Margin="0,0,0,2"/>
+                                        <TextBlock Text="{Binding DetailVersion}" Foreground="#E1E3E6" FontWeight="SemiBold" FontSize="12" TextTrimming="CharacterEllipsis"/>
+                                    </StackPanel>
+                                </Grid>
+
+                                <Grid Margin="0,0,0,12">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    
+                                    <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                                        <TextBlock Text="Nível de Integridade" Foreground="#848694" FontSize="10" Margin="0,0,0,2"/>
+                                        <TextBlock Text="{Binding DetailIntegrity}" Foreground="#E1E3E6" FontWeight="SemiBold" FontSize="12"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock Text="Compilado em" Foreground="#848694" FontSize="10" Margin="0,0,0,2"/>
+                                        <TextBlock Text="{Binding DetailDate}" Foreground="#E1E3E6" FontWeight="SemiBold" FontSize="12"/>
+                                    </StackPanel>
+                                </Grid>
+
+                                <!-- Process Management Priority Commands -->
+                                <TextBlock Text="Definir Prioridade" Foreground="#848694" FontSize="10" Margin="0,8,0,4"/>
+                                <UniformGrid Columns="3">
+                                    <Button Content="Alta" Command="{Binding ChangePriorityCommand}" CommandParameter="High" Margin="2" Padding="0,5"/>
+                                    <Button Content="Normal" Command="{Binding ChangePriorityCommand}" CommandParameter="Normal" Margin="2" Padding="0,5"/>
+                                    <Button Content="Baixa" Command="{Binding ChangePriorityCommand}" CommandParameter="Idle" Margin="2" Padding="0,5"/>
+                                </UniformGrid>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </TabItem>
+
+                    <!-- Tab 2: Resources charts -->
+                    <TabItem Header="Métricas">
+                        <StackPanel Margin="0,10,0,0">
+                            <TextBlock Text="Gráficos de Consumo em Tempo Real" Foreground="#5C62D6" FontWeight="SemiBold" FontSize="13" Margin="0,0,0,10"/>
+                            
+                            <!-- CPU Graph -->
+                            <TextBlock Text="CPU do Processo" Foreground="#848694" FontSize="10" Margin="0,0,0,4"/>
+                            <components:PerformanceChart x:Name="ProcessCpuChart" Title="CPU" MaxValue="100" StrokeColor="#5C62D6" FillColor="#5C62D6" Height="80" Margin="0,0,0,15"/>
+
+                            <!-- Memory Graph -->
+                            <TextBlock Text="Memória Privada (MB)" Foreground="#848694" FontSize="10" Margin="0,0,0,4"/>
+                            <components:PerformanceChart x:Name="ProcessRamChart" Title="Mem" MaxValue="1024" StrokeColor="#00B4D8" FillColor="#00B4D8" Height="80" Unit="MB" Margin="0,0,0,15"/>
+
+                            <!-- Disk Graph -->
+                            <TextBlock Text="I/O do Disco (KB/s)" Foreground="#848694" FontSize="10" Margin="0,0,0,4"/>
+                            <components:PerformanceChart x:Name="ProcessDiskChart" Title="Disco" MaxValue="5000" StrokeColor="#E76F51" FillColor="#E76F51" Height="80" Unit="K" Margin="0,0,0,10"/>
+                        </StackPanel>
+                    </TabItem>
+
+                    <!-- Tab 3: Modules (DLLs) -->
+                    <TabItem Header="Módulos">
+                        <Grid Margin="0,10,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Text="DLLs Carregadas em Memória" Foreground="#5C62D6" FontWeight="SemiBold" FontSize="13" Margin="0,0,0,8"/>
+                            <Border Grid.Row="1" Background="#0D0E15" BorderBrush="#232530" BorderThickness="1" CornerRadius="4" ClipToBounds="True">
+                                <ListView ItemsSource="{Binding LoadedModules}" Background="Transparent" BorderThickness="0">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding}" Foreground="#E1E3E6" FontSize="11" TextWrapping="Wrap" Margin="3"/>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </Border>
+                        </Grid>
+                    </TabItem>
+
+                    <!-- Tab 4: Threads -->
+                    <TabItem Header="Threads">
+                        <Grid Margin="0,10,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Text="Linhas de Execução (Threads)" Foreground="#5C62D6" FontWeight="SemiBold" FontSize="13" Margin="0,0,0,8"/>
+                            <DataGrid Grid.Row="1" 
+                                      ItemsSource="{Binding ProcessThreads}" 
+                                      AutoGenerateColumns="False" 
+                                      IsReadOnly="True"
+                                      Background="#0D0E15"
+                                      BorderBrush="#232530"
+                                      RowBackground="#0D0E15"
+                                      AlternatingRowBackground="#11131C"
+                                      HeadersVisibility="Column"
+                                      HorizontalGridLinesBrush="#232530"
+                                      GridLinesVisibility="Horizontal">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="TID" Binding="{Binding Id}" Width="60"/>
+                                    <DataGridTextColumn Header="Estado" Binding="{Binding State}" Width="90"/>
+                                    <DataGridTextColumn Header="Prioridade" Binding="{Binding Priority}" Width="90"/>
+                                    <DataGridTextColumn Header="Base" Binding="{Binding BasePriority}" Width="50"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>
+                    </TabItem>
+
+                    <!-- Tab 5: IA & Security -->
+                    <TabItem Header="Segurança">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,10,0,0">
+                            <StackPanel>
+                                <!-- Risk Banner -->
+                                <Border CornerRadius="8" Padding="15" Margin="0,0,0,15">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="Background" Value="#152A2D3C"/>
+                                            <Setter Property="BorderBrush" Value="#252A2D3C"/>
+                                            <Setter Property="BorderThickness" Value="1"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding DetailRiskLevel}" Value="Perigo">
+                                                    <Setter Property="Background" Value="#22E63946"/>
+                                                    <Setter Property="BorderBrush" Value="#E63946"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding DetailRiskLevel}" Value="Alerta">
+                                                    <Setter Property="Background" Value="#22FCA311"/>
+                                                    <Setter Property="BorderBrush" Value="#FCA311"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding DetailRiskLevel}" Value="Seguro">
+                                                    <Setter Property="Background" Value="#222A9D8F"/>
+                                                    <Setter Property="BorderBrush" Value="#2A9D8F"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        
+                                        <TextBlock FontFamily="{StaticResource SegoeFluentFont}" Text="&#xE727;" FontSize="28" Margin="0,0,15,0" VerticalAlignment="Center" Grid.Column="0">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Foreground" Value="#848694"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding DetailRiskLevel}" Value="Perigo">
+                                                            <Setter Property="Foreground" Value="#E63946"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding DetailRiskLevel}" Value="Alerta">
+                                                            <Setter Property="Foreground" Value="#FCA311"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding DetailRiskLevel}" Value="Seguro">
+                                                            <Setter Property="Foreground" Value="#2A9D8F"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                        
+                                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                            <TextBlock Text="Avaliação de Risco AI" Foreground="#848694" FontSize="11" FontWeight="SemiBold"/>
+                                            <TextBlock Text="{Binding DetailRiskLevel, StringFormat={}Nível de Ameaça: {0}}" Foreground="#E1E3E6" FontSize="16" FontWeight="Bold"/>
+                                            <TextBlock Text="{Binding DetailRiskScore, StringFormat={}Pontuação de Risco: {0}/100}" Foreground="#848694" FontSize="12" Margin="0,2,0,0"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+
+                                <!-- VirusTotal Results -->
+                                <TextBlock Text="VirusTotal Security Check" Foreground="#848694" FontSize="10" Margin="0,0,0,2"/>
+                                <Border Background="#0D0E15" BorderBrush="#232530" BorderThickness="1" CornerRadius="4" Padding="10" Margin="0,0,0,15">
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding DetailVirusTotal}" Foreground="#E1E3E6" FontWeight="Bold" FontSize="11"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- AI Findings -->
+                                <TextBlock Text="Diagnóstico Inteligente" Foreground="#5C62D6" FontWeight="SemiBold" FontSize="13" Margin="0,0,0,8"/>
+                                <Border Background="#0D0E15" BorderBrush="#232530" BorderThickness="1" CornerRadius="4" Padding="12">
+                                    <TextBlock Text="{Binding DetailAiExplanation}" Foreground="#E1E3E6" FontSize="11" TextWrapping="Wrap" LineHeight="16"/>
+                                </Border>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </TabItem>
+                </TabControl>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>
