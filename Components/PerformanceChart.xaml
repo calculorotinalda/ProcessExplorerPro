@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="150" d:DesignWidth="300">
-    <Grid Background="#0D0E15" ClipToBounds="True">
+    <Grid Background="{DynamicResource TextBoxBackgroundBrush}" ClipToBounds="True">
         <!-- Canvas for Grid Lines -->
         <Canvas x:Name="GridCanvas" Opacity="0.1" />
         
@@ -27,10 +27,10 @@
         </Path>
 
         <!-- Current Value Indicator Overlay -->
-        <Border HorizontalAlignment="Right" VerticalAlignment="Top" Margin="8" Padding="6,3" Background="#161821" CornerRadius="4" BorderBrush="#232530" BorderThickness="1">
+        <Border HorizontalAlignment="Right" VerticalAlignment="Top" Margin="8" Padding="6,3" Background="{DynamicResource CardBrush}" CornerRadius="4" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
             <StackPanel Orientation="Horizontal">
-                <TextBlock x:Name="TitleLabel" Text="Usage" Foreground="#848694" FontSize="10" FontWeight="SemiBold" Margin="0,0,4,0"/>
-                <TextBlock x:Name="ValueLabel" Text="0.0%" Foreground="#E1E3E6" FontSize="10" FontWeight="Bold"/>
+                <TextBlock x:Name="TitleLabel" Text="Usage" Foreground="{DynamicResource TextMutedBrush}" FontSize="10" FontWeight="SemiBold" Margin="0,0,4,0"/>
+                <TextBlock x:Name="ValueLabel" Text="0.0%" Foreground="{DynamicResource TextBrush}" FontSize="10" FontWeight="Bold"/>
             </StackPanel>
         </Border>
     </Grid>

@@ -47,8 +47,8 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0">
-                    <TextBlock Text="PROCESSOS" Foreground="#5C62D6" FontSize="11" FontWeight="Bold"/>
-                    <TextBlock Text="Explorador de Processos Ativos" Foreground="#E1E3E6" FontSize="20" FontWeight="Bold" Margin="0,2,0,0"/>
+                    <TextBlock Text="PROCESSOS" Foreground="{DynamicResource AccentBrush}" FontSize="11" FontWeight="Bold"/>
+                    <TextBlock Text="Explorador de Processos Ativos" Foreground="{DynamicResource TextBrush}" FontSize="20" FontWeight="Bold" Margin="0,2,0,0"/>
                 </StackPanel>
                 
                 <!-- System Action Buttons -->
@@ -66,7 +66,7 @@
                     
                     <!-- Export Dropdown Button -->
                     <Menu Background="Transparent" BorderThickness="0" VerticalAlignment="Center">
-                        <MenuItem Header="Exportar Dados" Background="#1E202F" BorderThickness="1" BorderBrush="{StaticResource BorderBrush}" Height="30" Width="130" Margin="0" VerticalContentAlignment="Center">
+                        <MenuItem Header="Exportar Dados" Background="{DynamicResource ButtonBackgroundBrush}" BorderThickness="1" BorderBrush="{DynamicResource BorderBrush}" Height="30" Width="130" Margin="0" VerticalContentAlignment="Center">
                             <MenuItem.HeaderTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
@@ -84,7 +84,7 @@
             </Grid>
 
             <!-- Filters & Views Bar -->
-            <Border Grid.Row="1" Background="#161821" BorderBrush="#232530" BorderThickness="1" CornerRadius="8" Padding="10" Margin="0,0,0,15">
+            <Border Grid.Row="1" Background="{DynamicResource CardBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="8" Padding="10" Margin="0,0,0,15">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="250" />
@@ -99,19 +99,18 @@
                                  Padding="10,6,30,6"
                                  FontSize="12"/>
                         <!-- Search glass overlay -->
-                        <TextBlock FontFamily="{StaticResource SegoeFluentFont}" Text="&#xE721;" Foreground="{StaticResource TextMutedBrush}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" IsHitTestVisible="False"/>
+                        <TextBlock FontFamily="{StaticResource SegoeFluentFont}" Text="&#xE721;" Foreground="{DynamicResource TextMutedBrush}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" IsHitTestVisible="False"/>
                     </Grid>
-
                     <!-- View Mode Radio Selector -->
                     <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="15,0,0,0">
-                        <TextBlock Text="Visualização:" Foreground="#848694" VerticalAlignment="Center" Margin="0,0,8,0" FontSize="12"/>
+                        <TextBlock Text="Visualização:" Foreground="{DynamicResource TextMutedBrush}" VerticalAlignment="Center" Margin="0,0,8,0" FontSize="12"/>
                         <RadioButton Content="Árvore" IsChecked="{Binding SelectedViewMode, Converter={StaticResource ComparisonConverter}, ConverterParameter=Tree}" Style="{StaticResource {x:Type ToggleButton}}" Padding="12,5" Margin="0,0,4,0"/>
                         <RadioButton Content="Plana" IsChecked="{Binding SelectedViewMode, Converter={StaticResource ComparisonConverter}, ConverterParameter=Flat}" Style="{StaticResource {x:Type ToggleButton}}" Padding="12,5"/>
                     </StackPanel>
-
+ 
                     <!-- Grouping Mode Selector -->
                     <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" Margin="15,0,0,0">
-                        <TextBlock Text="Agrupar por:" Foreground="#848694" VerticalAlignment="Center" Margin="0,0,8,0" FontSize="12"/>
+                        <TextBlock Text="Agrupar por:" Foreground="{DynamicResource TextMutedBrush}" VerticalAlignment="Center" Margin="0,0,8,0" FontSize="12"/>
                         <ComboBox SelectedValue="{Binding SelectedGroupMode}" SelectedValuePath="Tag" Width="130">
                             <ComboBoxItem Content="Nenhum" Tag="None" IsSelected="True"/>
                             <ComboBoxItem Content="Proprietário" Tag="User"/>
@@ -127,30 +126,30 @@
                       SelectedItem="{Binding SelectedProcess}"
                       AutoGenerateColumns="False" 
                       IsReadOnly="True" 
-                      Background="#161821" 
-                      BorderBrush="#232530" 
+                      Background="{DynamicResource CardBrush}" 
+                      BorderBrush="{DynamicResource BorderBrush}" 
                       BorderThickness="1"
-                      RowBackground="#161821"
-                      AlternatingRowBackground="#191B26"
+                      RowBackground="{DynamicResource CardBrush}"
+                      AlternatingRowBackground="{DynamicResource AlternatingRowBrush}"
                       GridLinesVisibility="Horizontal"
-                      HorizontalGridLinesBrush="#232530"
+                      HorizontalGridLinesBrush="{DynamicResource BorderBrush}"
                       HeadersVisibility="Column"
                       SelectionMode="Single">
                 
                 <DataGrid.Resources>
                     <Style TargetType="DataGridColumnHeader">
-                        <Setter Property="Background" Value="#232530"/>
-                        <Setter Property="Foreground" Value="#848694"/>
+                        <Setter Property="Background" Value="{DynamicResource BorderBrush}"/>
+                        <Setter Property="Foreground" Value="{DynamicResource TextMutedBrush}"/>
                         <Setter Property="FontWeight" Value="SemiBold"/>
                         <Setter Property="Padding" Value="10,8"/>
                         <Setter Property="BorderThickness" Value="0,0,0,1"/>
-                        <Setter Property="BorderBrush" Value="#232530"/>
+                        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
                     </Style>
                     <Style TargetType="DataGridCell">
                         <Setter Property="Padding" Value="8,10"/>
                         <Setter Property="BorderThickness" Value="0"/>
                         <Setter Property="Background" Value="Transparent"/>
-                        <Setter Property="Foreground" Value="#E1E3E6"/>
+                        <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
                     </Style>
                 </DataGrid.Resources>
                 
@@ -185,7 +184,7 @@
                                         <TextBlock FontFamily="{StaticResource SegoeFluentFont}" Text="&#xE76C;" FontSize="8" VerticalAlignment="Center">
                                             <TextBlock.Style>
                                                 <Style TargetType="TextBlock">
-                                                    <Setter Property="Foreground" Value="#848694"/>
+                                                    <Setter Property="Foreground" Value="{DynamicResource TextMutedBrush}"/>
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding IsExpanded}" Value="True">
                                                             <Setter Property="LayoutTransform">
@@ -221,7 +220,7 @@
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock">
                                                 <Setter Property="Text" Value="&#xE71D;" />
-                                                <Setter Property="Foreground" Value="#5C62D6" />
+                                                <Setter Property="Foreground" Value="{DynamicResource AccentBrush}" />
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding IsSuspicious}" Value="True">
                                                         <Setter Property="Foreground" Value="#E63946" />
@@ -231,7 +230,7 @@
                                             </Style>
                                         </TextBlock.Style>
                                     </TextBlock>
-                                    <TextBlock Text="{Binding Name}" Foreground="#E1E3E6" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{Binding Name}" Foreground="{DynamicResource TextBrush}" FontWeight="SemiBold" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -250,10 +249,10 @@
                                 <TextBlock Text="{Binding CpuPercent, StringFormat={}{0:0.0}%}" FontWeight="Bold" VerticalAlignment="Center">
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
-                                            <Setter Property="Foreground" Value="#E1E3E6" />
+                                            <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding CpuPercent, Converter={StaticResource HighUsageConverter}, ConverterParameter=5}" Value="True">
-                                                    <Setter Property="Foreground" Value="#5C62D6" />
+                                                    <Setter Property="Foreground" Value="{DynamicResource AccentBrush}" />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
@@ -286,8 +285,8 @@
 
         <!-- Slide-out Detail Side Panel -->
         <Border Grid.Column="1" 
-                Background="#161821" 
-                BorderBrush="#232530" 
+                Background="{DynamicResource CardBrush}" 
+                BorderBrush="{DynamicResource BorderBrush}" 
                 BorderThickness="1,0,0,0" 
                 Padding="15,0,0,0"
                 Margin="5,0,0,0">
@@ -306,9 +305,9 @@
                     </Grid.ColumnDefinitions>
                     
                     <StackPanel Grid.Column="0">
-                        <TextBlock Text="DETALHES DO PROCESSO" Foreground="#5C62D6" FontSize="10" FontWeight="Bold"/>
-                        <TextBlock Text="{Binding SelectedProcess.Name}" Foreground="#E1E3E6" FontSize="18" FontWeight="Bold" TextTrimming="CharacterEllipsis"/>
-                        <TextBlock Text="{Binding SelectedProcess.Pid, StringFormat={}PID: {0}}" Foreground="#848694" FontSize="11" Margin="0,2,0,0"/>
+                        <TextBlock Text="DETALHES DO PROCESSO" Foreground="{DynamicResource AccentBrush}" FontSize="10" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding SelectedProcess.Name}" Foreground="{DynamicResource TextBrush}" FontSize="18" FontWeight="Bold" TextTrimming="CharacterEllipsis"/>
+                        <TextBlock Text="{Binding SelectedProcess.Pid, StringFormat={}PID: {0}}" Foreground="{DynamicResource TextMutedBrush}" FontSize="11" Margin="0,2,0,0"/>
                     </StackPanel>
                     
                     <Button Grid.Column="1" 
@@ -327,13 +326,13 @@
                     <TabItem Header="Geral" Margin="0">
                         <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,10,0,0">
                             <StackPanel>
-                                <TextBlock Text="Informações Gerais" Foreground="#5C62D6" FontWeight="SemiBold" FontSize="13" Margin="0,0,0,10"/>
+                                <TextBlock Text="Informações Gerais" Foreground="{DynamicResource AccentBrush}" FontWeight="SemiBold" FontSize="13" Margin="0,0,0,10"/>
                                 
-                                <TextBlock Text="Caminho do Ficheiro" Foreground="#848694" FontSize="10" Margin="0,0,0,2"/>
-                                <TextBox Text="{Binding SelectedProcess.Path, Mode=OneWay}" IsReadOnly="True" Background="#0D0E15" BorderBrush="#232530" TextWrapping="Wrap" Margin="0,0,0,12"/>
+                                <TextBlock Text="Caminho do Ficheiro" Foreground="{DynamicResource TextMutedBrush}" FontSize="10" Margin="0,0,0,2"/>
+                                <TextBox Text="{Binding SelectedProcess.Path, Mode=OneWay}" IsReadOnly="True" Background="{DynamicResource TextBoxBackgroundBrush}" BorderBrush="{DynamicResource BorderBrush}" TextWrapping="Wrap" Margin="0,0,0,12"/>
 
-                                <TextBlock Text="Argumentos da Linha de Comando" Foreground="#848694" FontSize="10" Margin="0,0,0,2"/>
-                                <TextBox Text="{Binding DetailCommandLine, Mode=OneWay}" IsReadOnly="True" Background="#0D0E15" BorderBrush="#232530" TextWrapping="Wrap" Height="60" VerticalScrollBarVisibility="Auto" Margin="0,0,0,12"/>
+                                <TextBlock Text="Argumentos da Linha de Comando" Foreground="{DynamicResource TextMutedBrush}" FontSize="10" Margin="0,0,0,2"/>
+                                <TextBox Text="{Binding DetailCommandLine, Mode=OneWay}" IsReadOnly="True" Background="{DynamicResource TextBoxBackgroundBrush}" BorderBrush="{DynamicResource BorderBrush}" TextWrapping="Wrap" Height="60" VerticalScrollBarVisibility="Auto" Margin="0,0,0,12"/>
 
                                 <Grid Margin="0,0,0,12">
                                     <Grid.ColumnDefinitions>
@@ -342,13 +341,13 @@
                                     </Grid.ColumnDefinitions>
                                     
                                     <StackPanel Grid.Column="0" Margin="0,0,8,0">
-                                        <TextBlock Text="Editor / Publisher" Foreground="#848694" FontSize="10" Margin="0,0,0,2"/>
-                                        <TextBlock Text="{Binding DetailPublisher}" Foreground="#E1E3E6" FontWeight="SemiBold" FontSize="12" TextTrimming="CharacterEllipsis"/>
+                                        <TextBlock Text="Editor / Publisher" Foreground="{DynamicResource TextMutedBrush}" FontSize="10" Margin="0,0,0,2"/>
+                                        <TextBlock Text="{Binding DetailPublisher}" Foreground="{DynamicResource TextBrush}" FontWeight="SemiBold" FontSize="12" TextTrimming="CharacterEllipsis"/>
                                     </StackPanel>
 
                                     <StackPanel Grid.Column="1">
-                                        <TextBlock Text="Versão do Produto" Foreground="#848694" FontSize="10" Margin="0,0,0,2"/>
-                                        <TextBlock Text="{Binding DetailVersion}" Foreground="#E1E3E6" FontWeight="SemiBold" FontSize="12" TextTrimming="CharacterEllipsis"/>
+                                        <TextBlock Text="Versão do Produto" Foreground="{DynamicResource TextMutedBrush}" FontSize="10" Margin="0,0,0,2"/>
+                                        <TextBlock Text="{Binding DetailVersion}" Foreground="{DynamicResource TextBrush}" FontWeight="SemiBold" FontSize="12" TextTrimming="CharacterEllipsis"/>
                                     </StackPanel>
                                 </Grid>
 
@@ -359,18 +358,18 @@
                                     </Grid.ColumnDefinitions>
                                     
                                     <StackPanel Grid.Column="0" Margin="0,0,8,0">
-                                        <TextBlock Text="Nível de Integridade" Foreground="#848694" FontSize="10" Margin="0,0,0,2"/>
-                                        <TextBlock Text="{Binding DetailIntegrity}" Foreground="#E1E3E6" FontWeight="SemiBold" FontSize="12"/>
+                                        <TextBlock Text="Nível de Integridade" Foreground="{DynamicResource TextMutedBrush}" FontSize="10" Margin="0,0,0,2"/>
+                                        <TextBlock Text="{Binding DetailIntegrity}" Foreground="{DynamicResource TextBrush}" FontWeight="SemiBold" FontSize="12"/>
                                     </StackPanel>
 
                                     <StackPanel Grid.Column="1">
-                                        <TextBlock Text="Compilado em" Foreground="#848694" FontSize="10" Margin="0,0,0,2"/>
-                                        <TextBlock Text="{Binding DetailDate}" Foreground="#E1E3E6" FontWeight="SemiBold" FontSize="12"/>
+                                        <TextBlock Text="Compilado em" Foreground="{DynamicResource TextMutedBrush}" FontSize="10" Margin="0,0,0,2"/>
+                                        <TextBlock Text="{Binding DetailDate}" Foreground="{DynamicResource TextBrush}" FontWeight="SemiBold" FontSize="12"/>
                                     </StackPanel>
                                 </Grid>
 
                                 <!-- Process Management Priority Commands -->
-                                <TextBlock Text="Definir Prioridade" Foreground="#848694" FontSize="10" Margin="0,8,0,4"/>
+                                <TextBlock Text="Definir Prioridade" Foreground="{DynamicResource TextMutedBrush}" FontSize="10" Margin="0,8,0,4"/>
                                 <UniformGrid Columns="3">
                                     <Button Content="Alta" Command="{Binding ChangePriorityCommand}" CommandParameter="High" Margin="2" Padding="0,5"/>
                                     <Button Content="Normal" Command="{Binding ChangePriorityCommand}" CommandParameter="Normal" Margin="2" Padding="0,5"/>
@@ -383,18 +382,18 @@
                     <!-- Tab 2: Resources charts -->
                     <TabItem Header="Métricas">
                         <StackPanel Margin="0,10,0,0">
-                            <TextBlock Text="Gráficos de Consumo em Tempo Real" Foreground="#5C62D6" FontWeight="SemiBold" FontSize="13" Margin="0,0,0,10"/>
+                            <TextBlock Text="Gráficos de Consumo em Tempo Real" Foreground="{DynamicResource AccentBrush}" FontWeight="SemiBold" FontSize="13" Margin="0,0,0,10"/>
                             
                             <!-- CPU Graph -->
-                            <TextBlock Text="CPU do Processo" Foreground="#848694" FontSize="10" Margin="0,0,0,4"/>
+                            <TextBlock Text="CPU do Processo" Foreground="{DynamicResource TextMutedBrush}" FontSize="10" Margin="0,0,0,4"/>
                             <components:PerformanceChart x:Name="ProcessCpuChart" Title="CPU" MaxValue="100" StrokeColor="#5C62D6" FillColor="#5C62D6" Height="80" Margin="0,0,0,15"/>
 
                             <!-- Memory Graph -->
-                            <TextBlock Text="Memória Privada (MB)" Foreground="#848694" FontSize="10" Margin="0,0,0,4"/>
+                            <TextBlock Text="Memória Privada (MB)" Foreground="{DynamicResource TextMutedBrush}" FontSize="10" Margin="0,0,0,4"/>
                             <components:PerformanceChart x:Name="ProcessRamChart" Title="Mem" MaxValue="1024" StrokeColor="#00B4D8" FillColor="#00B4D8" Height="80" Unit="MB" Margin="0,0,0,15"/>
 
                             <!-- Disk Graph -->
-                            <TextBlock Text="I/O do Disco (KB/s)" Foreground="#848694" FontSize="10" Margin="0,0,0,4"/>
+                            <TextBlock Text="I/O do Disco (KB/s)" Foreground="{DynamicResource TextMutedBrush}" FontSize="10" Margin="0,0,0,4"/>
                             <components:PerformanceChart x:Name="ProcessDiskChart" Title="Disco" MaxValue="5000" StrokeColor="#E76F51" FillColor="#E76F51" Height="80" Unit="K" Margin="0,0,0,10"/>
                         </StackPanel>
                     </TabItem>
@@ -406,12 +405,12 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" Text="DLLs Carregadas em Memória" Foreground="#5C62D6" FontWeight="SemiBold" FontSize="13" Margin="0,0,0,8"/>
-                            <Border Grid.Row="1" Background="#0D0E15" BorderBrush="#232530" BorderThickness="1" CornerRadius="4" ClipToBounds="True">
+                            <TextBlock Grid.Row="0" Text="DLLs Carregadas em Memória" Foreground="{DynamicResource AccentBrush}" FontWeight="SemiBold" FontSize="13" Margin="0,0,0,8"/>
+                            <Border Grid.Row="1" Background="{DynamicResource TextBoxBackgroundBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" ClipToBounds="True">
                                 <ListView ItemsSource="{Binding LoadedModules}" Background="Transparent" BorderThickness="0">
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding}" Foreground="#E1E3E6" FontSize="11" TextWrapping="Wrap" Margin="3"/>
+                                            <TextBlock Text="{Binding}" Foreground="{DynamicResource TextBrush}" FontSize="11" TextWrapping="Wrap" Margin="3"/>
                                         </DataTemplate>
                                     </ListView.ItemTemplate>
                                 </ListView>
@@ -426,17 +425,17 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" Text="Linhas de Execução (Threads)" Foreground="#5C62D6" FontWeight="SemiBold" FontSize="13" Margin="0,0,0,8"/>
+                            <TextBlock Grid.Row="0" Text="Linhas de Execução (Threads)" Foreground="{DynamicResource AccentBrush}" FontWeight="SemiBold" FontSize="13" Margin="0,0,0,8"/>
                             <DataGrid Grid.Row="1" 
                                       ItemsSource="{Binding ProcessThreads}" 
                                       AutoGenerateColumns="False" 
                                       IsReadOnly="True"
-                                      Background="#0D0E15"
-                                      BorderBrush="#232530"
-                                      RowBackground="#0D0E15"
-                                      AlternatingRowBackground="#11131C"
+                                      Background="{DynamicResource TextBoxBackgroundBrush}"
+                                      BorderBrush="{DynamicResource BorderBrush}"
+                                      RowBackground="{DynamicResource TextBoxBackgroundBrush}"
+                                      AlternatingRowBackground="{DynamicResource AlternatingRowBrush}"
                                       HeadersVisibility="Column"
-                                      HorizontalGridLinesBrush="#232530"
+                                      HorizontalGridLinesBrush="{DynamicResource BorderBrush}"
                                       GridLinesVisibility="Horizontal">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="TID" Binding="{Binding Id}" Width="60"/>
@@ -480,11 +479,10 @@
                                             <ColumnDefinition Width="Auto" />
                                             <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
-                                        
-                                        <TextBlock FontFamily="{StaticResource SegoeFluentFont}" Text="&#xE727;" FontSize="28" Margin="0,0,15,0" VerticalAlignment="Center" Grid.Column="0">
+                                                               <TextBlock FontFamily="{StaticResource SegoeFluentFont}" Text="&#xE727;" FontSize="28" Margin="0,0,15,0" VerticalAlignment="Center" Grid.Column="0">
                                             <TextBlock.Style>
                                                 <Style TargetType="TextBlock">
-                                                    <Setter Property="Foreground" Value="#848694"/>
+                                                    <Setter Property="Foreground" Value="{DynamicResource TextMutedBrush}"/>
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding DetailRiskLevel}" Value="Perigo">
                                                             <Setter Property="Foreground" Value="#E63946"/>
@@ -501,25 +499,25 @@
                                         </TextBlock>
                                         
                                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                            <TextBlock Text="Avaliação de Risco AI" Foreground="#848694" FontSize="11" FontWeight="SemiBold"/>
-                                            <TextBlock Text="{Binding DetailRiskLevel, StringFormat={}Nível de Ameaça: {0}}" Foreground="#E1E3E6" FontSize="16" FontWeight="Bold"/>
-                                            <TextBlock Text="{Binding DetailRiskScore, StringFormat={}Pontuação de Risco: {0}/100}" Foreground="#848694" FontSize="12" Margin="0,2,0,0"/>
+                                            <TextBlock Text="Avaliação de Risco AI" Foreground="{DynamicResource TextMutedBrush}" FontSize="11" FontWeight="SemiBold"/>
+                                            <TextBlock Text="{Binding DetailRiskLevel, StringFormat={}Nível de Ameaça: {0}}" Foreground="{DynamicResource TextBrush}" FontSize="16" FontWeight="Bold"/>
+                                            <TextBlock Text="{Binding DetailRiskScore, StringFormat={}Pontuação de Risco: {0}/100}" Foreground="{DynamicResource TextMutedBrush}" FontSize="12" Margin="0,2,0,0"/>
                                         </StackPanel>
                                     </Grid>
                                 </Border>
-
+ 
                                 <!-- VirusTotal Results -->
-                                <TextBlock Text="VirusTotal Security Check" Foreground="#848694" FontSize="10" Margin="0,0,0,2"/>
-                                <Border Background="#0D0E15" BorderBrush="#232530" BorderThickness="1" CornerRadius="4" Padding="10" Margin="0,0,0,15">
+                                <TextBlock Text="VirusTotal Security Check" Foreground="{DynamicResource TextMutedBrush}" FontSize="10" Margin="0,0,0,2"/>
+                                <Border Background="{DynamicResource TextBoxBackgroundBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="10" Margin="0,0,0,15">
                                     <StackPanel>
-                                        <TextBlock Text="{Binding DetailVirusTotal}" Foreground="#E1E3E6" FontWeight="Bold" FontSize="11"/>
+                                        <TextBlock Text="{Binding DetailVirusTotal}" Foreground="{DynamicResource TextBrush}" FontWeight="Bold" FontSize="11"/>
                                     </StackPanel>
                                 </Border>
-
+ 
                                 <!-- AI Findings -->
-                                <TextBlock Text="Diagnóstico Inteligente" Foreground="#5C62D6" FontWeight="SemiBold" FontSize="13" Margin="0,0,0,8"/>
-                                <Border Background="#0D0E15" BorderBrush="#232530" BorderThickness="1" CornerRadius="4" Padding="12">
-                                    <TextBlock Text="{Binding DetailAiExplanation}" Foreground="#E1E3E6" FontSize="11" TextWrapping="Wrap" LineHeight="16"/>
+                                <TextBlock Text="Diagnóstico Inteligente" Foreground="{DynamicResource AccentBrush}" FontWeight="SemiBold" FontSize="13" Margin="0,0,0,8"/>
+                                <Border Background="{DynamicResource TextBoxBackgroundBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4" Padding="12">
+                                    <TextBlock Text="{Binding DetailAiExplanation}" Foreground="{DynamicResource TextBrush}" FontSize="11" TextWrapping="Wrap" LineHeight="16"/>
                                 </Border>
                             </StackPanel>
                         </ScrollViewer>

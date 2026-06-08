@@ -21,8 +21,8 @@
 
         <!-- Header -->
         <StackPanel Grid.Row="0" Margin="0,0,0,15">
-            <TextBlock Text="DESEMPENHO" Foreground="#5C62D6" FontSize="11" FontWeight="Bold"/>
-            <TextBlock Text="Monitor de Recursos do Sistema" Foreground="#E1E3E6" FontSize="20" FontWeight="Bold" Margin="0,2,0,0"/>
+            <TextBlock Text="DESEMPENHO" Foreground="{DynamicResource AccentBrush}" FontSize="11" FontWeight="Bold"/>
+            <TextBlock Text="Monitor de Recursos do Sistema" Foreground="{DynamicResource TextBrush}" FontSize="20" FontWeight="Bold" Margin="0,2,0,0"/>
         </StackPanel>
 
         <!-- Main Panel (Left Sidebar Tabs & Right Detailed Chart) -->
@@ -42,8 +42,8 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="0">
-                            <TextBlock Text="CPU" Foreground="#E1E3E6" FontWeight="Bold" FontSize="13"/>
-                            <TextBlock Text="{Binding CpuDetails}" Foreground="#848694" FontSize="11" Margin="0,2,0,0"/>
+                            <TextBlock Text="CPU" Foreground="{DynamicResource TextBrush}" FontWeight="Bold" FontSize="13"/>
+                            <TextBlock Text="{Binding CpuDetails}" Foreground="{DynamicResource TextMutedBrush}" FontSize="11" Margin="0,2,0,0"/>
                         </StackPanel>
                         <components:PerformanceChart x:Name="MiniCpuChart" Grid.Column="1" Width="80" Height="40" StrokeColor="#5C62D6" FillColor="#5C62D6" MaxValue="100"/>
                     </Grid>
@@ -57,8 +57,8 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="0">
-                            <TextBlock Text="Memória" Foreground="#E1E3E6" FontWeight="Bold" FontSize="13"/>
-                            <TextBlock Text="{Binding RamDetails}" Foreground="#848694" FontSize="10" Margin="0,2,0,0" TextTrimming="CharacterEllipsis"/>
+                            <TextBlock Text="Memória" Foreground="{DynamicResource TextBrush}" FontWeight="Bold" FontSize="13"/>
+                            <TextBlock Text="{Binding RamDetails}" Foreground="{DynamicResource TextMutedBrush}" FontSize="10" Margin="0,2,0,0" TextTrimming="CharacterEllipsis"/>
                         </StackPanel>
                         <components:PerformanceChart x:Name="MiniRamChart" Grid.Column="1" Width="80" Height="40" StrokeColor="#00B4D8" FillColor="#00B4D8" MaxValue="100"/>
                     </Grid>
@@ -72,8 +72,8 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="0">
-                            <TextBlock Text="GPU" Foreground="#E1E3E6" FontWeight="Bold" FontSize="13"/>
-                            <TextBlock Text="{Binding GpuDetails}" Foreground="#848694" FontSize="11" Margin="0,2,0,0"/>
+                            <TextBlock Text="GPU" Foreground="{DynamicResource TextBrush}" FontWeight="Bold" FontSize="13"/>
+                            <TextBlock Text="{Binding GpuDetails}" Foreground="{DynamicResource TextMutedBrush}" FontSize="11" Margin="0,2,0,0"/>
                         </StackPanel>
                         <components:PerformanceChart x:Name="MiniGpuChart" Grid.Column="1" Width="80" Height="40" StrokeColor="#2A9D8F" FillColor="#2A9D8F" MaxValue="100"/>
                     </Grid>
@@ -87,8 +87,8 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="0">
-                            <TextBlock Text="Disco" Foreground="#E1E3E6" FontWeight="Bold" FontSize="13"/>
-                            <TextBlock Text="{Binding DiskDetails}" Foreground="#848694" FontSize="11" Margin="0,2,0,0"/>
+                            <TextBlock Text="Disco" Foreground="{DynamicResource TextBrush}" FontWeight="Bold" FontSize="13"/>
+                            <TextBlock Text="{Binding DiskDetails}" Foreground="{DynamicResource TextMutedBrush}" FontSize="11" Margin="0,2,0,0"/>
                         </StackPanel>
                         <components:PerformanceChart x:Name="MiniDiskChart" Grid.Column="1" Width="80" Height="40" StrokeColor="#E76F51" FillColor="#E76F51" MaxValue="100"/>
                     </Grid>
@@ -102,8 +102,8 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="0">
-                            <TextBlock Text="Rede" Foreground="#E1E3E6" FontWeight="Bold" FontSize="13"/>
-                            <TextBlock Text="{Binding NetworkDetails}" Foreground="#848694" FontSize="11" Margin="0,2,0,0"/>
+                            <TextBlock Text="Rede" Foreground="{DynamicResource TextBrush}" FontWeight="Bold" FontSize="13"/>
+                            <TextBlock Text="{Binding NetworkDetails}" Foreground="{DynamicResource TextMutedBrush}" FontSize="11" Margin="0,2,0,0"/>
                         </StackPanel>
                         <components:PerformanceChart x:Name="MiniNetworkChart" Grid.Column="1" Width="80" Height="40" StrokeColor="#F4A261" FillColor="#F4A261" MaxValue="10000" Unit="Kbps"/>
                     </Grid>
@@ -111,7 +111,7 @@
             </StackPanel>
 
             <!-- Right Detailed Graphic Display -->
-            <Border Grid.Column="1" Background="#161821" BorderBrush="#232530" BorderThickness="1" CornerRadius="8" Padding="20">
+            <Border Grid.Column="1" Background="{DynamicResource CardBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="8" Padding="20">
                 <Grid>
                     <!-- CPU Detail -->
                     <Grid>
@@ -130,8 +130,8 @@
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
                         <StackPanel Grid.Row="0" Margin="0,0,0,15">
-                            <TextBlock Text="Histórico de Utilização do Processador" Foreground="#E1E3E6" FontSize="16" FontWeight="Bold"/>
-                            <TextBlock Text="{Binding CpuDetails}" Foreground="#5C62D6" FontSize="12" Margin="0,4,0,0"/>
+                            <TextBlock Text="Histórico de Utilização do Processador" Foreground="{DynamicResource TextBrush}" FontSize="16" FontWeight="Bold"/>
+                            <TextBlock Text="{Binding CpuDetails}" Foreground="{DynamicResource AccentBrush}" FontSize="12" Margin="0,4,0,0"/>
                         </StackPanel>
                         <components:PerformanceChart x:Name="DetailedCpuChart" Grid.Row="1" Title="CPU %" MaxValue="100" StrokeColor="#5C62D6" FillColor="#5C62D6"/>
                     </Grid>
@@ -153,7 +153,7 @@
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
                         <StackPanel Grid.Row="0" Margin="0,0,0,15">
-                            <TextBlock Text="Histórico de Utilização da Memória RAM" Foreground="#E1E3E6" FontSize="16" FontWeight="Bold"/>
+                            <TextBlock Text="Histórico de Utilização da Memória RAM" Foreground="{DynamicResource TextBrush}" FontSize="16" FontWeight="Bold"/>
                             <TextBlock Text="{Binding RamDetails}" Foreground="#00B4D8" FontSize="12" Margin="0,4,0,0"/>
                         </StackPanel>
                         <components:PerformanceChart x:Name="DetailedRamChart" Grid.Row="1" Title="RAM %" MaxValue="100" StrokeColor="#00B4D8" FillColor="#00B4D8"/>
@@ -176,7 +176,7 @@
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
                         <StackPanel Grid.Row="0" Margin="0,0,0,15">
-                            <TextBlock Text="Histórico de Utilização da GPU" Foreground="#E1E3E6" FontSize="16" FontWeight="Bold"/>
+                            <TextBlock Text="Histórico de Utilização da GPU" Foreground="{DynamicResource TextBrush}" FontSize="16" FontWeight="Bold"/>
                             <TextBlock Text="{Binding GpuDetails}" Foreground="#2A9D8F" FontSize="12" Margin="0,4,0,0"/>
                         </StackPanel>
                         <components:PerformanceChart x:Name="DetailedGpuChart" Grid.Row="1" Title="GPU %" MaxValue="100" StrokeColor="#2A9D8F" FillColor="#2A9D8F"/>
@@ -199,7 +199,7 @@
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
                         <StackPanel Grid.Row="0" Margin="0,0,0,15">
-                            <TextBlock Text="Histórico de Utilização do Disco" Foreground="#E1E3E6" FontSize="16" FontWeight="Bold"/>
+                            <TextBlock Text="Histórico de Utilização do Disco" Foreground="{DynamicResource TextBrush}" FontSize="16" FontWeight="Bold"/>
                             <TextBlock Text="{Binding DiskDetails}" Foreground="#E76F51" FontSize="12" Margin="0,4,0,0"/>
                         </StackPanel>
                         <components:PerformanceChart x:Name="DetailedDiskChart" Grid.Row="1" Title="Disco" MaxValue="100" StrokeColor="#E76F51" FillColor="#E76F51"/>
@@ -222,7 +222,7 @@
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
                         <StackPanel Grid.Row="0" Margin="0,0,0,15">
-                            <TextBlock Text="Histórico de Rede (E/S)" Foreground="#E1E3E6" FontSize="16" FontWeight="Bold"/>
+                            <TextBlock Text="Histórico de Rede (E/S)" Foreground="{DynamicResource TextBrush}" FontSize="16" FontWeight="Bold"/>
                             <TextBlock Text="{Binding NetworkDetails, StringFormat={}Velocidade Atual: {0}}" Foreground="#F4A261" FontSize="12" Margin="0,4,0,0"/>
                         </StackPanel>
                         <components:PerformanceChart x:Name="DetailedNetworkChart" Grid.Row="1" Title="Rede" MaxValue="10000" StrokeColor="#F4A261" FillColor="#F4A261" Unit="Kbps"/>

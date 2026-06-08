@@ -25,8 +25,8 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0">
-                <TextBlock Text="CONEXÕES DE REDE" Foreground="#5C62D6" FontSize="11" FontWeight="Bold"/>
-                <TextBlock Text="Atividade de Rede Ativa" Foreground="#E1E3E6" FontSize="20" FontWeight="Bold" Margin="0,2,0,0"/>
+                <TextBlock Text="CONEXÕES DE REDE" Foreground="{DynamicResource AccentBrush}" FontSize="11" FontWeight="Bold"/>
+                <TextBlock Text="Atividade de Rede Ativa" Foreground="{DynamicResource TextBrush}" FontSize="20" FontWeight="Bold" Margin="0,2,0,0"/>
             </StackPanel>
             
             <Button Grid.Column="1" 
@@ -41,7 +41,7 @@
         </Grid>
 
         <!-- Filters Bar -->
-        <Border Grid.Row="1" Background="#161821" BorderBrush="#232530" BorderThickness="1" CornerRadius="8" Padding="10" Margin="0,0,0,15">
+        <Border Grid.Row="1" Background="{DynamicResource CardBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="8" Padding="10" Margin="0,0,0,15">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="250" />
@@ -55,12 +55,12 @@
                              Padding="10,6,30,6"
                              FontSize="12"/>
                     <!-- Search glass overlay -->
-                    <TextBlock FontFamily="{StaticResource SegoeFluentFont}" Text="&#xE721;" Foreground="{StaticResource TextMutedBrush}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" IsHitTestVisible="False"/>
+                    <TextBlock FontFamily="{StaticResource SegoeFluentFont}" Text="&#xE721;" Foreground="{DynamicResource TextMutedBrush}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" IsHitTestVisible="False"/>
                 </Grid>
 
                 <!-- Protocol Filter Buttons -->
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="15,0,0,0">
-                    <TextBlock Text="Protocolo:" Foreground="#848694" VerticalAlignment="Center" Margin="0,0,8,0" FontSize="12"/>
+                    <TextBlock Text="Protocolo:" Foreground="{DynamicResource TextMutedBrush}" VerticalAlignment="Center" Margin="0,0,8,0" FontSize="12"/>
                     <RadioButton Content="Todos" IsChecked="{Binding SelectedProtocol, Converter={StaticResource ComparisonConverter}, ConverterParameter=Todos}" Style="{StaticResource {x:Type ToggleButton}}" Padding="12,5" Margin="0,0,4,0"/>
                     <RadioButton Content="TCP" IsChecked="{Binding SelectedProtocol, Converter={StaticResource ComparisonConverter}, ConverterParameter=TCP}" Style="{StaticResource {x:Type ToggleButton}}" Padding="12,5" Margin="0,0,4,0"/>
                     <RadioButton Content="UDP" IsChecked="{Binding SelectedProtocol, Converter={StaticResource ComparisonConverter}, ConverterParameter=UDP}" Style="{StaticResource {x:Type ToggleButton}}" Padding="12,5"/>
@@ -73,30 +73,30 @@
                   ItemsSource="{Binding DisplayedConnections}" 
                   AutoGenerateColumns="False" 
                   IsReadOnly="True" 
-                  Background="#161821" 
-                  BorderBrush="#232530" 
+                  Background="{DynamicResource CardBrush}" 
+                  BorderBrush="{DynamicResource BorderBrush}" 
                   BorderThickness="1"
-                  RowBackground="#161821"
-                  AlternatingRowBackground="#191B26"
+                  RowBackground="{DynamicResource CardBrush}"
+                  AlternatingRowBackground="{DynamicResource AlternatingRowBrush}"
                   GridLinesVisibility="Horizontal"
-                  HorizontalGridLinesBrush="#232530"
+                  HorizontalGridLinesBrush="{DynamicResource BorderBrush}"
                   HeadersVisibility="Column"
                   SelectionMode="Single">
 
             <DataGrid.Resources>
                 <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="Background" Value="#232530"/>
-                    <Setter Property="Foreground" Value="#848694"/>
+                    <Setter Property="Background" Value="{DynamicResource BorderBrush}"/>
+                    <Setter Property="Foreground" Value="{DynamicResource TextMutedBrush}"/>
                     <Setter Property="FontWeight" Value="SemiBold"/>
                     <Setter Property="Padding" Value="10,8"/>
                     <Setter Property="BorderThickness" Value="0,0,0,1"/>
-                    <Setter Property="BorderBrush" Value="#232530"/>
+                    <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
                 </Style>
                 <Style TargetType="DataGridCell">
                     <Setter Property="Padding" Value="8,10"/>
                     <Setter Property="BorderThickness" Value="0"/>
                     <Setter Property="Background" Value="Transparent"/>
-                    <Setter Property="Foreground" Value="#E1E3E6"/>
+                    <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
                 </Style>
             </DataGrid.Resources>
 
@@ -106,7 +106,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock FontFamily="{StaticResource SegoeFluentFont}" Text="&#xE704;" Foreground="#5C62D6" FontSize="14" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                <TextBlock FontFamily="{StaticResource SegoeFluentFont}" Text="&#xE704;" Foreground="{DynamicResource AccentBrush}" FontSize="14" Margin="0,0,8,0" VerticalAlignment="Center"/>
                                 <TextBlock Text="{Binding ProcessName}" FontWeight="SemiBold" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
                             </StackPanel>
                         </DataTemplate>
@@ -120,8 +120,8 @@
                 <DataGridTemplateColumn Header="Protocolo" Width="90" SortMemberPath="Protocol">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Border CornerRadius="4" Padding="6,2" HorizontalAlignment="Left" Background="#205C62D6">
-                                <TextBlock Text="{Binding Protocol}" Foreground="#5C62D6" FontSize="10" FontWeight="Bold"/>
+                            <Border CornerRadius="4" Padding="6,2" HorizontalAlignment="Left" Background="{DynamicResource SelectedRowBrush}">
+                                <TextBlock Text="{Binding Protocol}" Foreground="{DynamicResource AccentBrush}" FontSize="10" FontWeight="Bold"/>
                             </Border>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -140,7 +140,7 @@
                             <TextBlock Text="{Binding State}" VerticalAlignment="Center">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
-                                        <Setter Property="Foreground" Value="#E1E3E6"/>
+                                        <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding State}" Value="ESTABLISHED">
                                                 <Setter Property="Foreground" Value="#2A9D8F"/>

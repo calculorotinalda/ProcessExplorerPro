@@ -9,10 +9,22 @@ namespace ProcessExplorerPro.ViewModels
         private bool _isAiEnabled = true;
         private bool _isVirusTotalEnabled = true;
 
+        public SettingsViewModel()
+        {
+            _isDarkTheme = App.LoadThemePreference();
+        }
+
         public bool IsDarkTheme
         {
             get => _isDarkTheme;
-            set => SetProperty(ref _isDarkTheme, value);
+            set
+            {
+                if (SetProperty(ref _isDarkTheme, value))
+                {
+                    App.ApplyTheme(value);
+                    App.SaveThemePreference(value);
+                }
+            }
         }
 
         public string RefreshRate
