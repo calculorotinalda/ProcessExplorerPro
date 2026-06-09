@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using ProcessExplorerPro.Helpers;
@@ -40,12 +41,14 @@ namespace ProcessExplorerPro.ViewModels
         public ObservableCollection<NetworkItem> DisplayedConnections { get; } = new();
 
         public ICommand RefreshCommand { get; }
+        public ICommand TaskkillCommand { get; }
 
         private List<NetworkItem> _allConnections = new();
 
         public NetworkViewModel()
         {
             RefreshCommand = new RelayCommand(_ => RefreshConnections());
+            TaskkillCommand = new RelayCommand(ExecuteTaskkill, CanExecuteTaskkill);
 
             _timer = new DispatcherTimer
             {
@@ -150,7 +153,7 @@ namespace ProcessExplorerPro.ViewModels
                     // Catch netstat exceptions
                 }
 
-                // Update UI Collection
+                if (App.Current == null) return;
                 App.Current.Dispatcher.Invoke(() =>
                 {
                     _allConnections = list.OrderBy(c => c.ProcessName).ToList();
@@ -184,6 +187,69 @@ namespace ProcessExplorerPro.ViewModels
             foreach (var connection in filtered)
             {
                 DisplayedConnections.Add(connection);
+            }
+        }
+
+        private bool CanExecuteTaskkill(object? obj)
+        {
+            if (obj is NetworkItem item)
+            {
+                return item.Pid > 4;
+            }
+            return false;
+        }
+
+        private void ExecuteTaskkill(object? obj)
+        {
+            if (obj is not NetworkItem item) return;
+
+            var result = MessageBox.Show(
+                $"Tem a certeza de que deseja executar 'taskkill /pid {item.Pid} /f' para terminar o processo {item.ProcessName} (PID: {item.Pid})?",
+                "Terminar Processo por Força - Process Explorer Pro",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                try
+                {
+                    var startInfo = new ProcessStartInfo
+                    {
+                        FileName = "taskkill.exe",
+                        Arguments = $"/pid {item.Pid} /f",
+                        CreateNoWindow = true,
+                        UseShellExecute = false,
+                        RedirectStandardOutput = true,
+                        RedirectStandardError = true
+                    };
+
+                    using var proc = Process.Start(startInfo);
+                    if (proc != null)
+                    {
+                        proc.WaitForExit();
+                        string output = proc.StandardOutput.ReadToEnd();
+                        string error = proc.StandardError.ReadToEnd();
+
+                        if (proc.ExitCode == 0)
+                        {
+                            MessageBox.Show($"Comando executado com sucesso.\n\nProcesso {item.ProcessName} (PID: {item.Pid}) foi terminado.", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                        else
+                        {
+                            MessageBox.Show($"Erro ao executar taskkill (Código de saída: {proc.ExitCode}).\n\nDetalhes:\n{error}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Não foi possível iniciar o utilitário taskkill.exe.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                    
+                    RefreshConnections();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Erro ao executar taskkill: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
 

@@ -406,6 +406,7 @@ namespace ProcessExplorerPro.ViewModels
                 var modules = ProcessHelper.GetLoadedModules(process.Pid);
                 var threads = ProcessHelper.GetProcessThreads(process.Pid);
 
+                if (Application.Current == null) return;
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     // Ensure process is still selected

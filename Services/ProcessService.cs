@@ -173,6 +173,48 @@ namespace ProcessExplorerPro.Services
                 // Parent PID lookup
                 parentMap.TryGetValue(pid, out int parentPid);
 
+                // Safe fallback fields for dynamic process properties
+                long memoryBytes = 0;
+                int threadsCount = 0;
+                int basePriority = 8;
+                bool responding = true;
+
+                try
+                {
+                    memoryBytes = proc.PrivateMemorySize64;
+                }
+                catch
+                {
+                    // Access denied or process terminated
+                }
+
+                try
+                {
+                    threadsCount = proc.Threads.Count;
+                }
+                catch
+                {
+                    // Access denied or process terminated
+                }
+
+                try
+                {
+                    basePriority = proc.BasePriority;
+                }
+                catch
+                {
+                    // Access denied or process terminated
+                }
+
+                try
+                {
+                    responding = proc.Responding;
+                }
+                catch
+                {
+                    // Access denied or process terminated
+                }
+
                 var item = new ProcessItem
                 {
                     Name = proc.ProcessName,
@@ -180,14 +222,14 @@ namespace ProcessExplorerPro.Services
                     ParentPid = parentPid,
                     User = owner,
                     CpuPercent = cpuPercent,
-                    MemoryBytes = proc.PrivateMemorySize64, // private bytes
+                    MemoryBytes = memoryBytes,
                     GpuPercent = gpuPercent,
                     DiskBytesPerSec = diskBytesPerSec,
                     NetworkBytesPerSec = 0, // Filled in separately or simulated
-                    ThreadsCount = proc.Threads.Count,
+                    ThreadsCount = threadsCount,
                     HandlesCount = handleCount,
-                    Priority = proc.BasePriority >= 13 ? "High" : (proc.BasePriority >= 8 ? "Normal" : "Low"),
-                    Status = proc.Responding ? "Running" : "Suspended",
+                    Priority = basePriority >= 13 ? "High" : (basePriority >= 8 ? "Normal" : "Low"),
+                    Status = responding ? "Running" : "Suspended",
                     Path = string.IsNullOrEmpty(path) ? "System Process" : path,
                     Publisher = publisher,
                     IntegrityLevel = integrity,
